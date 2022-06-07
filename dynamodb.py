@@ -17,10 +17,13 @@ def delete_user(id):
     return getResponse(status_code, json.dumps({"status": id + " deleted"}))
     
 def get_user(id):
-    key = {"userId": id}
-    result = table.get_item(Key = key)
+    result = table.query(
+        KeyConditionExpression='userId = :userId',
+        ExpressionAttributeValues={
+        ':userId': id
+    })
     status_code = result['ResponseMetadata']['HTTPStatusCode']
-    return getResponse(status_code, result["Item"])
+    return getResponse(status_code, result["Items"])
     
 def add_phone_number(id, number, subscriptionARN):
     key = {"userId": id}
