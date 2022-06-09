@@ -18,6 +18,6 @@ def handler(event, context):
         return response(sns.subscribe(userId, phoneNumber))
     if userId and request == 'delete':
         return response(db.delete_user(userId))
-    else:
-        return response("null input")
+    
+    return response("null input")
     
