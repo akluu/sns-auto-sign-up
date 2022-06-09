@@ -1,6 +1,7 @@
 import boto3
 import json
 
+
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('userId')
 
@@ -8,13 +9,13 @@ def create_user(id):
     item = {"userId": id, "phoneNumber": "", "subscriptionARN": ""}
     result = table.put_item(Item = item)
     status_code = result['ResponseMetadata']['HTTPStatusCode']
-    return getResponse(status_code, json.dumps(item))
+    return getResponse(status_code, item)
     
 def delete_user(id):
     key = {"userId": id}
     result = table.delete_item(Key = key)
     status_code = result['ResponseMetadata']['HTTPStatusCode']
-    return getResponse(status_code, json.dumps({"status": id + " deleted"}))
+    return getResponse(status_code, {id:"deleted"})
     
 def get_user(id):
     result = table.query(
@@ -23,7 +24,7 @@ def get_user(id):
         ':userId': id
     })
     status_code = result['ResponseMetadata']['HTTPStatusCode']
-    return getResponse(status_code, result["Items"])
+    return getResponse(status_code, result["Items"][0])
     
 def add_phone_number(id, number, subscriptionARN):
     key = {"userId": id}

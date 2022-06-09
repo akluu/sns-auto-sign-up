@@ -1,6 +1,6 @@
 import boto3
-import json
 import dynamodb as db
+
 
 region_name = "us-west-2"
 sns_client = boto3.client('sns',region_name=region_name)
@@ -17,20 +17,15 @@ def subscribe(id, phoneNumber):
     subscriptionARN = response['SubscriptionArn']
     if status_code == 200:
         db.add_phone_number(id, phoneNumber, subscriptionARN)
-        return response
-    else: 
-        return {
-            "statusCode": status_code,
-            "headers": {"Access-Control-Allow-Origin": "*"},
-            "body": json.dumps({"status": "request invalid"})
-        }
+        return db.getResponse(status_code, db.get_user(id)['body'])
+    
 
 def unsubscribe(id):
-    subscriptionARN = db.get_user(id)['body'][0]['subscriptionARN']
+    subscriptionARN = db.get_user(id)['body']['subscriptionARN']
     response = sns_client.unsubscribe(SubscriptionArn=subscriptionARN)
     db.add_phone_number(id, "", "")
     status_code = response['ResponseMetadata']['HTTPStatusCode']
-    return 0 if status_code == 200 else -1
+    return db.getResponse(status_code, db.get_user(id)['body'])
 
 
 

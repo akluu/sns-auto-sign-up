@@ -18,6 +18,10 @@ provider:
             - 'dynamodb:UpdateItem'
             - 'dynamodb:DeleteItem'
           Resource: "arn:aws:dynamodb:us-west-1:*:table/users"
+        - Effect: Allow
+          Action:
+            - 'SNS:*'
+          Resource: '*'
 
 
 functions:
