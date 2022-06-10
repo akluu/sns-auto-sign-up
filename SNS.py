@@ -22,15 +22,17 @@ def subscribe(id, phoneNumber):
 
 def unsubscribe(id):
     subscriptionARN = db.get_user(id)['body']['subscriptionARN']
-    if not subscriptionARN: 
+    phoneNumber = db.get_user(id)['body']['phoneNumber']
+    if not subscriptionARN or phoneNumber: 
         return db.getResponse(200, db.get_user(id)['body'])
     response = sns_client.unsubscribe(SubscriptionArn=subscriptionARN)
     db.add_phone_number(id, "", "")
     status_code = response['ResponseMetadata']['HTTPStatusCode']
+    publishNumber(phoneNumber, "Sucessfully Unsubscribed")
     return db.getResponse(status_code, db.get_user(id)['body'])
 
-def testNumber(number):
-    response = sns_client.publish(PhoneNumber=number, Message="Thanks for signing up.")
+def publishNumber(number, message):
+    response = sns_client.publish(PhoneNumber=number, Message=message)
     status_code = response['ResponseMetadata']['HTTPStatusCode']
     return db.getResponse(status_code, json.dumps({"status": "request valid"}))
     

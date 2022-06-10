@@ -34,7 +34,7 @@ def handler(event, context):
     if userId and phoneNumber and not request:
         if validNumber(phoneNumber):
             result = sns.subscribe(userId, phoneNumber)
-            sns.testNumber(phoneNumber)
+            sns.testNumber(phoneNumber, "Thanks for subscribing! :)")
             return response(200, json.dumps(result))
         else:
             return response(400, json.dumps({"status": "invalid phone number"}))    
