@@ -3,6 +3,18 @@ app: auto-number-sign-up
 service: auto-number-sign-up
 frameworkVersion: '3'
 
+plugins:
+   - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+     dockerizePip: non-linux
+
+package:
+  patterns:
+    - '!node_modules/**'
+    - '!venv/**'
+
 provider:
   name: aws
   region: us-west-1
@@ -12,12 +24,8 @@ provider:
       statements:
         - Effect: Allow
           Action:
-            - 'dynamodb:PutItem'
-            - 'dynamodb:Get*'
-            - 'dynamodb:Scan*'
-            - 'dynamodb:UpdateItem'
-            - 'dynamodb:DeleteItem'
-          Resource: "arn:aws:dynamodb:us-west-1:*:table/users"
+            - 'dynamodb:*'
+          Resource: "*"
         - Effect: Allow
           Action:
             - 'SNS:*'
@@ -59,4 +67,6 @@ resources:
             Projection:
               ProjectionType: 'ALL'
         BillingMode: "PAY_PER_REQUEST"
+
+
         

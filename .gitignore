@@ -17,8 +17,11 @@ var/
 *.egg
 venv
 __pycache__
+node_modules
 
 # Serverless directories
 .serverless
 *.pyc
+*.json
+
 
