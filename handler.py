@@ -6,7 +6,7 @@ import SNS as sns
 
 def response(code, body):
     return {"statusCode": code, "body": body}
-    
+
 def validNumber(number):
     try:
         phoneNumber = pn.parse(number)
@@ -39,6 +39,6 @@ def handler(event, context):
         else:
             return response(400, json.dumps({"status": "invalid phone number"}))    
     
-    return response("null/no input")
+    return response(200, "null/no input")
   
     
